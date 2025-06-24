@@ -16,17 +16,18 @@ def listener(sample: zenoh.Sample):
     s_user_name = s.split(" : ")[0]
     if s_user_name != user_name :
         print(
-            f">> {s}"
+            f"\n>>> {s}"
         )
+        print("> ", end=" ", flush=True)
     
 with zenoh.open(conf) as session:
     key = "chat1"
     session.declare_subscriber(key, listener)
     fini = False
     while user_name== "" :
-        user_name= input("Nom d'uilisateur : ")
+        user_name= input("Nom d'utilisateur : ")
     while not fini:
-        message = input("")
+        message = input("> ")
         s = user_name+ " : " + message
         session.put(key, s)
     
