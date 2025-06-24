@@ -8,7 +8,7 @@ user_name= ""
 zenoh.init_log_from_env_or("error")
 
 print("Entrain de rejoindre le chat...")
-print("Pour quitter : Ctrl + C")
+print("Pour quitter, tapez : /leave")
 
 def listener(sample: zenoh.Sample):
     global user_name
@@ -26,8 +26,14 @@ with zenoh.open(conf) as session:
     fini = False
     while user_name== "" :
         user_name= input("Nom d'utilisateur : ")
+    session.put(key, user_name + " : " + "< a rejoint le chat >")
     while not fini:
         message = input("> ")
-        s = user_name+ " : " + message
-        session.put(key, s)
-    
+        if message == "/leave" :
+            session.put(key, user_name + " : " + "< a quitté(e) le chat >")
+            print("Vous avez quittez le chat")
+            fini = True
+        else :
+            s = user_name+ " : " + message
+            session.put(key, s)
+        
