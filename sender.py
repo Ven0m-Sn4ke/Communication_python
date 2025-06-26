@@ -21,12 +21,19 @@ def listener(sample: zenoh.Sample):
         print("> ", end=" ", flush=True)
     
 with zenoh.open(conf) as session:
-    key = "chat1"
-    session.declare_subscriber(key, listener)
+    key = "chat"
+    key_salon = ""
     fini = False
     while user_name== "" :
         user_name= input("Nom d'utilisateur : ")
-    session.put(key, user_name + " : " + "< a rejoint le chat >")
+    while key_salon == "" :
+        print("Differents salons accesibles :")
+        print("Commun")
+        print("ou créer le votre")
+        key_salon = input("Choix de salon : ")
+    key = key + "/" + key_salon
+    session.declare_subscriber(key, listener)
+    session.put(key, user_name + " : " + "< a rejoint le salon : " + key_salon + " >")
     while not fini:
         message = input("> ")
         if message == "/leave" :
