@@ -31,6 +31,13 @@ with zenoh.open(conf) as session:
         print("ou créer le votre")
         key_salon = input("Choix de salon : ")
     key = key + "/" + key_salon
+    replies = session.get(key, consolidation=zenoh.ConsolidationMode.NONE)
+    print(f"appelle get avec la clé {key}")
+    for reply in replies:
+        print(
+            f">>> {reply.ok.payload.to_string()}"
+        )
+
     session.declare_subscriber(key, listener)
     session.put(key, user_name + " : " + "< a rejoint le salon : " + key_salon + " >")
     while not fini:

@@ -19,6 +19,18 @@ class Salon :
 
 salons = {}
 
+def callback(query : zenoh.Query):
+    key = f"{query.selector}"
+    print(f"get recu {key}")
+    if key in salons :
+        sal = salons[key]
+        msgs = sal.get_msgs()
+        print("Salon trouvé")
+        for m in msgs:
+            query.reply(key, m)
+    else :
+        print("Salon non trouvé")
+
 def listener(sample: zenoh.Sample):
     global salons
     s = sample.payload.to_string() 
@@ -35,6 +47,7 @@ def listener(sample: zenoh.Sample):
 
 with zenoh.open(conf) as session:
     key = "chat/*"
+    session.declare_queryable(key, callback)
     session.declare_subscriber(key, listener)
     print("Lancement du serveur terminé...")
     while True :
