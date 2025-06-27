@@ -50,6 +50,7 @@ with zenoh.open(conf) as session:
     session.declare_queryable(key, callback)
     session.declare_subscriber(key, listener)
     print("Lancement du serveur terminé...")
+    print("Pour arretez le serveur, tapez : /shutdown ")
     while True :
         time.sleep(1)
 
