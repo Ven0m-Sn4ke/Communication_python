@@ -1,5 +1,4 @@
 import zenoh
-import json
 
 conf = zenoh.Config()
 
@@ -19,7 +18,7 @@ def listener(sample: zenoh.Sample):
             f"\n>>> {s}"
         )
         print("> ", end=" ", flush=True)
-    
+
 with zenoh.open(conf) as session:
     key = "chat"
     key_salon = ""
